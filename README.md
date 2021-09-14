@@ -1,2 +1,2 @@
 # LeeFPS
-For Practice Unity
+연습용 FPS 게임 만들기 프로젝트
