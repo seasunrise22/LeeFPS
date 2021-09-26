@@ -4,12 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 싱글턴으로 구현.
-// 남은 상자 카운트
+// 각종 UI 제어(남은 상자, 총알 개수)
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // 싱글턴을 할당할 전역 변수
+
     private int cratesNum; // 필드에 생성되어 있는 상자의 개수를 카운트할 변수.
     public Text cratesText; // 현재 필드에 생성되어 있는 상자의 개수 표시할 변수.
+
+    public Text currentAmmoText; // 현재 남은 총알 개수를 표시할 UI 텍스트
+    public Text extraAmmoText; // 여분의 총알 개수를 표시할 UI 텍스트
 
     // 게임 시작과 동시에 싱글턴을 구성
     private void Awake()
@@ -42,5 +46,14 @@ public class GameManager : MonoBehaviour
     {
         cratesNum--;
         cratesText.text = "남은 상자 : " + cratesNum;
+    }
+
+    public void UpdateAmmo(int currentAmmo, int maxAmmo, int extraCurrentAmmo, int extraMaxAmmo)
+    {
+        if (currentAmmo < 0 || extraCurrentAmmo < 0)
+            return;
+
+        currentAmmoText.text = currentAmmo + " / " + maxAmmo;
+        extraAmmoText.text = extraCurrentAmmo + " / " + extraMaxAmmo;
     }
 }
