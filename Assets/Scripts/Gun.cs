@@ -18,7 +18,9 @@ public class Gun : MonoBehaviour
     public ParticleSystem muzzleFlash; // 총구 이펙트
     public GameObject impactEffect; // 피탄 이펙트
 
-    public AudioSource gunAudio;
+    public AudioSource gunAudio; // 총에 달린 AudioSource = 카세트테이프
+    public AudioClip shootAudio; // 총 발사 소리
+    public AudioClip reloadAudio; // 재장전 소리
 
     // public으로 선언한 변수는 선언과 동시에 초기화가 되었다 손 치더라도,
     // inspector창에서의 값이 우선되어 적용되는 것 같다...
@@ -53,6 +55,7 @@ public class Gun : MonoBehaviour
 
     void Shoot()
     {
+        gunAudio.clip = shootAudio;
         gunAudio.Play();
         muzzleFlash.Play();        
         animator.SetTrigger("Shoot");
@@ -73,11 +76,13 @@ public class Gun : MonoBehaviour
 
     IEnumerator Reload()
     {
-        Debug.Log("Reloading...");
+        gunAudio.clip = reloadAudio;
+        gunAudio.Play();
+
         isReloading = true;
         animator.SetBool("isReloading", isReloading);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.6f);
 
         isReloading = false;
         animator.SetBool("isReloading", isReloading);
