@@ -18,9 +18,10 @@ public class Gun : MonoBehaviour
     public ParticleSystem muzzleFlash; // 총구 이펙트
     public GameObject impactEffect; // 피탄 이펙트
 
-    public AudioSource gunAudio; // 총에 달린 AudioSource = 카세트테이프
-    public AudioClip shootAudio; // 총 발사 소리
-    public AudioClip reloadAudio; // 재장전 소리
+    public AudioSource gunAudio;    // 총에 달린 AudioSource = 카세트테이프
+    public AudioClip shootAudio;    // 총 발사 소리
+    public AudioClip reloadAudio;   // 재장전 소리
+    public AudioClip emptyAmmo;     // 총알이 완전히 소진됐을 때 소리
 
     // public으로 선언한 변수는 선언과 동시에 초기화가 되었다 손 치더라도,
     // inspector창에서의 값이 우선되어 적용되는 것 같다...
@@ -37,24 +38,37 @@ public class Gun : MonoBehaviour
     {
         GameManager.instance.UpdateAmmo(currentAmmo, maxAmmo, extraCurrentAmmo, extraMaxAmmo);
 
+        // 제장전 상태
         if (isReloading)
             return;
 
+        // 사격 관련
         if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && currentAmmo > 0)
         {            
-            nextTimeToFire = Time.time + fireRate;
+            nextTimeToFire = Time.time + fireRate;            
             Shoot();
-        }            
+        }
 
-        // R버튼 누를경우 재장전 되도록
-        if(Input.GetKeyDown(KeyCode.R) && currentAmmo != maxAmmo || currentAmmo <= 0)
+        // 재장전 관련(R키를 눌렀으면서(AND) 현재 총알과 전체 총알 개수가 맞지 않거나(OR) 현재 총알이 0발일 경우)
+        if (Input.GetKeyDown(KeyCode.R) && currentAmmo != maxAmmo || currentAmmo <= 0)
         {
+            // ~인 와중에 R키를 눌렀는데 여분 총알까지 없다?
+            if (Input.GetKeyDown(KeyCode.R) && currentAmmo == 0 && extraCurrentAmmo == 0)
+            {
+                gunAudio.clip = emptyAmmo;
+                gunAudio.Play();
+                return;
+            } // 아무것도 없지만 R키는 누르지 않았다?
+            else if (currentAmmo == 0 && extraCurrentAmmo == 0)
+                return;
+
+            // 이도 저도 아니다 = 여분 총알은 있다. = 재장전 수행.
             StartCoroutine(Reload());
         }
     }
 
     void Shoot()
-    {
+    {      
         gunAudio.clip = shootAudio;
         gunAudio.Play();
         muzzleFlash.Play();        
@@ -86,6 +100,11 @@ public class Gun : MonoBehaviour
 
         isReloading = false;
         animator.SetBool("isReloading", isReloading);
-        currentAmmo = maxAmmo;
+
+        int reloadAmount = maxAmmo - currentAmmo;
+        if (reloadAmount > extraCurrentAmmo)
+            reloadAmount = extraCurrentAmmo;
+        extraCurrentAmmo -= reloadAmount;
+        currentAmmo += reloadAmount;
     }
 }
