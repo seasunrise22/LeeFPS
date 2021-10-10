@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 싱글턴으로 구현.
-// 각종 UI 제어(남은 상자, 총알 개수)
+// 각종 UI 제어(남은 상자, 총알 개수, 라이프 게이지)
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance; // 싱글턴을 할당할 전역 변수
@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
 
     public Text currentAmmoText; // 현재 남은 총알 개수를 표시할 UI 텍스트
     public Text extraAmmoText; // 여분의 총알 개수를 표시할 UI 텍스트
+
+    public int maxGauge = 100; // 최대 라이프 게이지
+    public int currentGauge; // 현재 게이지 수치
+    public GaugeBar gaugeBar; // 실제 라이프 게이지 오브젝트의 스크립트와 연결시킬 매개체
 
     // 게임 시작과 동시에 싱글턴을 구성
     private void Awake()
@@ -32,6 +36,26 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("씬에 두 개 이상의 게임 매니저가 존재합니다!");
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        currentGauge = 0; // 시작과 동시에 게이지 0으로 초기화
+        gaugeBar.SetMaxGauge(maxGauge);
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            TestTakeDamage(20);
+        }
+    }
+
+    void TestTakeDamage(int damage)
+    {
+        currentGauge += damage;
+        gaugeBar.SetGauge(currentGauge);
     }
 
     // 상자가 생성되면 AddCrates 함수를 호출하여 UI에 현재 생성되어 있는 상자들의 총 개수를 갱신시킬 예정. 

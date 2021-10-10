@@ -43,10 +43,22 @@ public class Gun : MonoBehaviour
             return;
 
         // 사격 관련
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && currentAmmo > 0)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
         {            
-            nextTimeToFire = Time.time + fireRate;            
-            Shoot();
+            // 사격 버튼을 눌렀을 때 현재 총알이 존재한다면
+            if(currentAmmo > 0)
+            {
+                nextTimeToFire = Time.time + fireRate;
+                Shoot();
+            }
+            // 사격 버튼을 눌렀을 때 현재 총알이 존재하지 않는다면 
+            else if(currentAmmo == 0 && extraCurrentAmmo == 0 && Input.GetButtonDown("Fire1")) 
+            {
+                gunAudio.clip = emptyAmmo;
+                gunAudio.Play();
+                return;
+            }
+            
         }
 
         // 재장전 관련(R키를 눌렀으면서(AND) 현재 총알과 전체 총알 개수가 맞지 않거나(OR) 현재 총알이 0발일 경우)
@@ -58,9 +70,19 @@ public class Gun : MonoBehaviour
                 gunAudio.clip = emptyAmmo;
                 gunAudio.Play();
                 return;
-            } // 아무것도 없지만 R키는 누르지 않았다?
-            else if (currentAmmo == 0 && extraCurrentAmmo == 0)
+            }
+            // R키를 눌렀는데 현재 총알은 있는데 여분 총알은 없다?
+            else if (Input.GetKeyDown(KeyCode.R) && extraCurrentAmmo == 0)
+            {
+                gunAudio.clip = emptyAmmo;
+                gunAudio.Play();
                 return;
+            }
+            // 아무것도 없지만 R키는 누르지 않았다?            
+            else if (currentAmmo == 0 && extraCurrentAmmo == 0)
+            {
+                return;
+            }
 
             // 이도 저도 아니다 = 여분 총알은 있다. = 재장전 수행.
             StartCoroutine(Reload());

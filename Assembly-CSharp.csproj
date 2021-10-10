@@ -56,6 +56,7 @@
     <Compile Include="Assets\Scripts\ControlParticle.cs" />
     <Compile Include="Assets\Scripts\CrateGenerator.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\GaugeBar.cs" />
     <Compile Include="Assets\Scripts\Gun.cs" />
     <Compile Include="Assets\Scripts\MouseLook.cs" />
     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
