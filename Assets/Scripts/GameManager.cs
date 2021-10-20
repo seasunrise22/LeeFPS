@@ -44,17 +44,9 @@ public class GameManager : MonoBehaviour
         gaugeBar.SetMaxGauge(maxGauge);
     }
 
-    private void Update()
+    public void AddGauge(int amount)
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            TestTakeDamage(20);
-        }
-    }
-
-    void TestTakeDamage(int damage)
-    {
-        currentGauge += damage;
+        currentGauge += amount;
         gaugeBar.SetGauge(currentGauge);
     }
 
