@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public int currentGauge; // 현재 게이지 수치
     public GaugeBar gaugeBar; // 실제 라이프 게이지 오브젝트의 스크립트와 연결시킬 매개체
 
+    public GameObject gameoverText; // 게임오버시 활성화 시킬 텍스트 UI 오브젝트
+
     // 게임 시작과 동시에 싱글턴을 구성
     private void Awake()
     {
@@ -47,6 +49,13 @@ public class GameManager : MonoBehaviour
     public void AddGauge(int amount)
     {
         currentGauge += amount;
+        
+        // 현재 게이지바의 수치가 100을 넘겼다면 게임오버 텍스트를 활성화하라
+        if(currentGauge >= 100)
+        {
+            gameoverText.SetActive(true);
+            Time.timeScale = 0;
+        }
         gaugeBar.SetGauge(currentGauge);
     }
 

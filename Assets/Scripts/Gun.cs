@@ -43,7 +43,7 @@ public class Gun : MonoBehaviour
             return;
 
         // 사격 관련
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && Time.timeScale == 1)
         {            
             // 사격 버튼을 눌렀을 때 현재 총알이 존재한다면
             if(currentAmmo > 0)
