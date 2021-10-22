@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 // 싱글턴으로 구현.
@@ -15,11 +16,19 @@ public class GameManager : MonoBehaviour
     public Text currentAmmoText; // 현재 남은 총알 개수를 표시할 UI 텍스트
     public Text extraAmmoText; // 여분의 총알 개수를 표시할 UI 텍스트
 
-    public int maxGauge = 100; // 최대 라이프 게이지
+    public int maxGauge; // 최대 라이프 게이지
     public int currentGauge; // 현재 게이지 수치
     public GaugeBar gaugeBar; // 실제 라이프 게이지 오브젝트의 스크립트와 연결시킬 매개체
 
     public GameObject gameoverText; // 게임오버시 활성화 시킬 텍스트 UI 오브젝트
+
+    int currentStage; // 현재 스테이지를 저장할 변수
+    public Text stageText; // 현재 스테이지를 나타낼 텍스트UI 오브젝트
+
+    bool isGameover; // 게임오버 상태인지 아닌지 체크용
+
+    public Text timerText; // 타이머 표시용 UI 오브젝트
+    float timeLeft; // 남은 시간
 
     // 게임 시작과 동시에 싱글턴을 구성
     private void Awake()
@@ -43,7 +52,40 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentGauge = 0; // 시작과 동시에 게이지 0으로 초기화
+        maxGauge = 1000;
         gaugeBar.SetMaxGauge(maxGauge);
+
+        currentStage = 1; // 게임 처음 시작하면 현재 스테이지 1로 초기화
+        SetStage(currentStage);
+
+        // 격겜 만들 때 처럼 ToString("0")으로 소수점 아래는 버리는 식으로 만들면 반올림한 숫자로 표시돼서
+        // 이번에도 시작을 30이 아닌 30.5로 해야할 줄 알았는데 0.0으로 소수점 아래까지 표현하니까 정상적으로 30초 부터 되는 듯?
+        timeLeft = 5f; 
+    }
+
+    private void Update()
+    {
+        timerText.text = (timeLeft).ToString("0.00");
+        timeLeft -= Time.deltaTime;
+        if (timeLeft <= 0)
+        {
+            timeLeft = 0f;
+            isGameover = true;
+        }            
+
+        // 게임오버 됐다면
+        if(isGameover)
+        {
+            gameoverText.SetActive(true);
+            Time.timeScale = 0;
+
+            // R키를 눌러서 씬을 다시 불러오라 = 게임 다시 시작
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene("Game");
+                Time.timeScale = 1;
+            }
+        }
     }
 
     public void AddGauge(int amount)
@@ -51,10 +93,9 @@ public class GameManager : MonoBehaviour
         currentGauge += amount;
         
         // 현재 게이지바의 수치가 100을 넘겼다면 게임오버 텍스트를 활성화하라
-        if(currentGauge >= 100)
+        if(currentGauge >= maxGauge)
         {
-            gameoverText.SetActive(true);
-            Time.timeScale = 0;
+            isGameover = true;            
         }
         gaugeBar.SetGauge(currentGauge);
     }
@@ -80,5 +121,11 @@ public class GameManager : MonoBehaviour
 
         currentAmmoText.text = currentAmmo + " / " + maxAmmo;
         extraAmmoText.text = extraCurrentAmmo + " / " + extraMaxAmmo;
+    }
+
+    // 현재 스테이지를 텍스트UI로 표시하기 위해서 호출될 메서드
+    void SetStage(int stage)
+    {
+        stageText.text = "Stage : " + stage;
     }
 }
