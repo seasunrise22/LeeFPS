@@ -28,7 +28,9 @@ public class GameManager : MonoBehaviour
     bool isGameover; // 게임오버 상태인지 아닌지 체크용
 
     public Text timerText; // 타이머 표시용 UI 오브젝트
-    float timeLeft; // 남은 시간
+    public float timeLeft; // 남은 시간
+
+    public bool isLvUp; // 스테이지 전환용 트리거
 
     // 게임 시작과 동시에 싱글턴을 구성
     private void Awake()
@@ -65,13 +67,17 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        timerText.text = (timeLeft).ToString("0.00");
-        timeLeft -= Time.deltaTime;
-        if (timeLeft <= 0)
+        if(!isLvUp)
         {
-            timeLeft = 0f;
-            isGameover = true;
-        }            
+            timerText.text = (timeLeft).ToString("0.00");
+            timeLeft -= Time.deltaTime;
+            if (timeLeft <= 0)
+            {
+                isLvUp = true;                
+                timeLeft = 0f;                
+                LevelManager.instance.SetStage(isLvUp);
+            }
+        }         
 
         // 게임오버 됐다면
         if(isGameover)
@@ -123,7 +129,7 @@ public class GameManager : MonoBehaviour
         extraAmmoText.text = extraCurrentAmmo + " / " + extraMaxAmmo;
     }
 
-    // 현재 스테이지를 텍스트UI로 표시하기 위해서 호출될 메서드
+    // 다음 스테이지를 세팅하기 위한 기능들이 담겨 있는 함수
     void SetStage(int stage)
     {
         stageText.text = "Stage : " + stage;
