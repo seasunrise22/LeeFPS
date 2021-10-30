@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 스테이지가 변경될 때 변경될 사항들을 모두 모아 놓은 레벨 매니저.
-// 게임 매니저에서 스테이지가 변경되어야 한다고 판단하면 이 오브젝트를 불러와서 레벨 조정후 스테이지를 다시 세팅한다.
+// 난이도에 맞는 스테이지 세팅.
+// UI 오브젝트 자체는 GameManager에 연결되어 있다. GameManager를 경유하여 UI를 갱신할 것.
 public class LevelManager : MonoBehaviour
 {
-    public static LevelManager instance;
+    public static LevelManager instance; // for 싱글턴
+    public int stageNum; // 현재 스테이지 넘버를 저장할 변수
 
     private void Awake()
     {
@@ -21,11 +22,21 @@ public class LevelManager : MonoBehaviour
         }   
     }
 
+    private void Start()
+    {
+        SetStage(true); // 게임이 시작되면 스테이지는 1로 초기화하여 UI에 갱신.
+    }
+
     public void SetStage(bool isLvUp)
     {
         if (isLvUp)
         {
-            Debug.Log("스테이지 이동");
+            // 스테이지 UI 갱신
+            stageNum++;
+            GameManager.instance.stageText.text = "Stage : " + stageNum;
+
+            // 상자 떨어지는 간격 조정
+            CrateGenerator.instance.genRate = CrateGenerator.instance.genRate / 1.2f;
         }       
     }
 }

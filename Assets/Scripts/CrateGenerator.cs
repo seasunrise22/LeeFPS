@@ -4,10 +4,23 @@ using UnityEngine;
 
 public class CrateGenerator : MonoBehaviour
 {
+    public static CrateGenerator instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+        {
+            Debug.LogWarning("씬에 두 개 이상의 CrateGenerator가 존재합니다!");
+            Destroy(gameObject);
+        }    
+    }
+
     public GameObject[] crates;  
 
     float nextGenTime;
-    float genRate = 3f;
+    public float genRate = 3f;
 
     private void FixedUpdate()
     {      
