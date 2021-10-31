@@ -34,6 +34,7 @@ public class LevelManager : MonoBehaviour
             // 스테이지 UI 갱신
             stageNum++;
             GameManager.instance.stageText.text = "Stage : " + stageNum;
+            GameManager.instance.isLvUp = false;
 
             // 상자 떨어지는 간격 조정
             CrateGenerator.instance.genRate = CrateGenerator.instance.genRate / 1.2f;

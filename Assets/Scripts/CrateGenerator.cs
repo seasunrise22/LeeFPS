@@ -20,7 +20,7 @@ public class CrateGenerator : MonoBehaviour
     public GameObject[] crates;  
 
     float nextGenTime;
-    public float genRate = 3f;
+    public float genRate = 4f;
 
     private void FixedUpdate()
     {      

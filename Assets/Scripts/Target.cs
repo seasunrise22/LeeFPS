@@ -13,13 +13,13 @@ public class Target : MonoBehaviour
         if (gameObject.transform.tag == "Crate")
         {
             health = 50f;
-            crateGauge = 100;
+            crateGauge = 200;
         }
             
         if (gameObject.transform.tag == "CrateBig")
         {
             health = 100f;
-            crateGauge = 150;
+            crateGauge = 250;
         }            
 
         // GameManager의 AddCrates 함수를 실행시켜 현재 필드에 생성 된 상자 숫자를 +1 한 후 UI에 표시.

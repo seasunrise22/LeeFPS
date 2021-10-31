@@ -722,6 +722,8 @@ MonoBehaviour:
   gaugeBar: {fileID: 1551499361}
   gameoverText: {fileID: 312568797}
   stageText: {fileID: 1173041542}
+  bestStage: {fileID: 3475817}
+  isGameover: 0
   timerText: {fileID: 234311756}
   timeLeft: 0
   isLvUp: 0
@@ -1323,6 +1325,7 @@ MonoBehaviour:
   crates:
   - {fileID: 6527167534785414297, guid: b4077d8dfcb5a0048bcb3f146c02c47d, type: 3}
   - {fileID: 4045775201956376403, guid: 9626d8c52e19aa4429fba34e3b40c46e, type: 3}
+  genRate: 3
 --- !u!4 &799138395
 Transform:
   m_ObjectHideFlags: 0
@@ -1366,6 +1369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26829d043c95ee418248d717e79b322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageNum: 0
 --- !u!4 &892434075
 Transform:
   m_ObjectHideFlags: 0

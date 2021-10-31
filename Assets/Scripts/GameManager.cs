@@ -22,10 +22,10 @@ public class GameManager : MonoBehaviour
 
     public GameObject gameoverText; // 게임오버시 활성화 시킬 텍스트 UI 오브젝트
 
-    int currentStage; // 현재 스테이지를 저장할 변수
     public Text stageText; // 현재 스테이지를 나타낼 텍스트UI 오브젝트
+    public Text bestStage; // 최고 스테이지를 나타낼 UI 오브젝트
 
-    bool isGameover; // 게임오버 상태인지 아닌지 체크용
+    public bool isGameover; // 게임오버 상태인지 아닌지 체크용
 
     public Text timerText; // 타이머 표시용 UI 오브젝트
     public float timeLeft; // 남은 시간
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
 
         // 격겜 만들 때 처럼 ToString("0")으로 소수점 아래는 버리는 식으로 만들면 반올림한 숫자로 표시돼서
         // 이번에도 시작을 30이 아닌 30.5로 해야할 줄 알았는데 0.0으로 소수점 아래까지 표현하니까 정상적으로 30초 부터 되는 듯?
-        timeLeft = 5f; 
+        timeLeft = 3f; 
     }
 
     private void Update()
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
             if (timeLeft <= 0)
             {
                 isLvUp = true; // 타이머가 0이 되면 if문이 더 이상 동작하지 않게 하기 위해.
-                timeLeft = 0f;
+                timeLeft = 3f;
                 LevelManager.instance.SetStage(isLvUp);
             }
         }
@@ -84,6 +84,12 @@ public class GameManager : MonoBehaviour
         if (isGameover)
         {
             gameoverText.SetActive(true);
+
+            // 최고점수 가져오기
+            if (PlayerPrefs.GetInt("bestScore") < LevelManager.instance.stageNum)
+                PlayerPrefs.SetInt("bestScore", LevelManager.instance.stageNum);
+            bestStage.text = "Best Stage : " + PlayerPrefs.GetInt("bestScore");
+
             Time.timeScale = 0;
 
             // R키를 눌러서 씬을 다시 불러오라 = 게임 다시 시작
@@ -99,11 +105,11 @@ public class GameManager : MonoBehaviour
     public void AddGauge(int amount)
     {
         currentGauge += amount;
-        
+
         // 현재 게이지바의 수치가 100을 넘겼다면 게임오버 텍스트를 활성화하라
-        if(currentGauge >= maxGauge)
+        if (currentGauge >= maxGauge)
         {
-            isGameover = true;            
+            isGameover = true;
         }
         gaugeBar.SetGauge(currentGauge);
     }
