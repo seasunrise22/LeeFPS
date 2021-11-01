@@ -6,6 +6,12 @@ public class CrateGenerator : MonoBehaviour
 {
     public static CrateGenerator instance;
 
+    public GameObject[] setCrates; // 상자 프리팹을 넣을 배열 변수
+    public List<GameObject> existCrates; // 생성 된 상자를 넣을 리스트. 크기를 정하지 않을 것이므로 List 사용.
+
+    float nextGenTime;
+    public float genRate = 4f;
+
     private void Awake()
     {
         if (instance == null)
@@ -17,10 +23,10 @@ public class CrateGenerator : MonoBehaviour
         }    
     }
 
-    public GameObject[] crates;  
-
-    float nextGenTime;
-    public float genRate = 4f;
+    private void Start()
+    {
+        existCrates = new List<GameObject>(); 
+    }    
 
     private void FixedUpdate()
     {      
@@ -45,6 +51,6 @@ public class CrateGenerator : MonoBehaviour
             Random.Range(0f, 45f), // minY, maxY
             Random.Range(0f, 45f)); // minZ, maxZ
 
-        Instantiate(crates[Random.Range(0, crates.Length)], randomPos, Quaternion.Euler(randomRot));
+        existCrates.Add(Instantiate(setCrates[Random.Range(0, setCrates.Length)], randomPos, Quaternion.Euler(randomRot)));
     }
 }

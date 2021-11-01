@@ -1322,9 +1322,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f439f03ff3fa5ed4ca33ef90e647267e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crates:
+  setCrates:
   - {fileID: 6527167534785414297, guid: b4077d8dfcb5a0048bcb3f146c02c47d, type: 3}
   - {fileID: 4045775201956376403, guid: 9626d8c52e19aa4429fba34e3b40c46e, type: 3}
+  existCrates: []
   genRate: 3
 --- !u!4 &799138395
 Transform:

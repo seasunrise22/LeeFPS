@@ -36,7 +36,7 @@ public class Target : MonoBehaviour
         }
     }
 
-    void Die()
+    public void Die()
     {
         Instantiate(particlePrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
