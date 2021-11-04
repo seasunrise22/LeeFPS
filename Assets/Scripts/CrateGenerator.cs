@@ -12,6 +12,8 @@ public class CrateGenerator : MonoBehaviour
     float nextGenTime;
     public float genRate = 4f;
 
+    public bool isGen; // isGen이 true일 때만 상자 생성하도록.
+
     private void Awake()
     {
         if (instance == null)
@@ -23,17 +25,21 @@ public class CrateGenerator : MonoBehaviour
         }    
     }
 
-    private void Start()
+    public void Start()
     {
-        existCrates = new List<GameObject>(); 
+        existCrates = new List<GameObject>();
+        isGen = true; // 상자를 생성하라.
     }    
 
     private void FixedUpdate()
     {      
         if(Time.time > nextGenTime)
         {
-            GenerateCrate();
-            nextGenTime = Time.time + genRate;
+            if(isGen)
+            {
+                GenerateCrate();
+                nextGenTime = Time.time + genRate;
+            }            
         }   
     }
 
