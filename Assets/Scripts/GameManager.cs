@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
 
         // 격겜 만들 때 처럼 ToString("0")으로 소수점 아래는 버리는 식으로 만들면 반올림한 숫자로 표시돼서
         // 이번에도 시작을 30이 아닌 30.5로 해야할 줄 알았는데 0.0으로 소수점 아래까지 표현하니까 정상적으로 30초 부터 되는 듯?
-        timeLeft = 3f; 
+        timeLeft = 100f; 
     }
 
     private void Update()

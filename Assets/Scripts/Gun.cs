@@ -6,6 +6,8 @@ public class Gun : MonoBehaviour
     public float damage = 10f;
     public float fireRate;
     float nextTimeToFire = 0f;
+    float nextTimeToMelee = 0f;
+    float meleeRate;
     int maxAmmo = 40;           // 탄창 용량
     int currentAmmo;            // 현재 탄창에 있는 총알 수
     int extraCurrentAmmo = 40;  // 현재 보유중인 여분의 총알
@@ -30,6 +32,7 @@ public class Gun : MonoBehaviour
     private void Start()
     {
         fireRate = 0.15f;
+        meleeRate = 0.5f;
         animator = gameObject.GetComponent<Animator>();
         currentAmmo = maxAmmo;
     }
@@ -67,9 +70,10 @@ public class Gun : MonoBehaviour
             }
 
             // 근접공격
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKeyDown(KeyCode.F) && Time.time >= nextTimeToMelee)
             {
-                animator.SetTrigger("MeleeAttack");
+                MeleeAttack();
+                nextTimeToMelee = Time.time + meleeRate;
             }
 
             // 재장전 관련(R키를 눌렀으면서(AND) 현재 총알과 전체 총알 개수가 맞지 않거나(OR) 현재 총알이 0발일 경우)
@@ -120,6 +124,20 @@ public class Gun : MonoBehaviour
             Destroy(impactGO, 1f);
         }
         currentAmmo--;
+    }
+
+    void MeleeAttack()
+    {
+        animator.SetTrigger("MeleeAttack");
+        RaycastHit hit;
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, 1f))
+        {
+            Target target = hit.transform.GetComponent<Target>();
+            if (target != null)
+            {
+                target.TakeDamage(damage);
+            }
+        }
     }
 
     IEnumerator Reload()
