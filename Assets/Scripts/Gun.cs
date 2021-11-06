@@ -36,60 +36,69 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
-        GameManager.instance.UpdateAmmo(currentAmmo, maxAmmo, extraCurrentAmmo, extraMaxAmmo);
-
-        // 제장전 상태
-        if (isReloading)
-            return;
-
-        // 사격 관련
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire && Time.timeScale == 1)
+        if(Time.timeScale == 1)
         {
-            // 테스트용
-            /*GameManager.instance.isGameover = true;*/
+            GameManager.instance.UpdateAmmo(currentAmmo, maxAmmo, extraCurrentAmmo, extraMaxAmmo);
 
-            // 사격 버튼을 눌렀을 때 현재 총알이 존재한다면
-            if(currentAmmo > 0)
-            {
-                nextTimeToFire = Time.time + fireRate;
-                Shoot();
-            }
-            // 사격 버튼을 눌렀을 때 현재 총알이 존재하지 않는다면 
-            else if(currentAmmo == 0 && extraCurrentAmmo == 0 && Input.GetButtonDown("Fire1")) 
-            {
-                gunAudio.clip = emptyAmmo;
-                gunAudio.Play();
+            // 제장전 상태
+            if (isReloading)
                 return;
-            }
-            
-        }
 
-        // 재장전 관련(R키를 눌렀으면서(AND) 현재 총알과 전체 총알 개수가 맞지 않거나(OR) 현재 총알이 0발일 경우)
-        if (Input.GetKeyDown(KeyCode.R) && currentAmmo != maxAmmo || currentAmmo <= 0)
-        {
-            // ~인 와중에 R키를 눌렀는데 여분 총알까지 없다?
-            if (Input.GetKeyDown(KeyCode.R) && currentAmmo == 0 && extraCurrentAmmo == 0)
+            // 사격
+            if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
             {
-                gunAudio.clip = emptyAmmo;
-                gunAudio.Play();
-                return;
-            }
-            // R키를 눌렀는데 현재 총알은 있는데 여분 총알은 없다?
-            else if (Input.GetKeyDown(KeyCode.R) && extraCurrentAmmo == 0)
-            {
-                gunAudio.clip = emptyAmmo;
-                gunAudio.Play();
-                return;
-            }
-            // 아무것도 없지만 R키는 누르지 않았다?            
-            else if (currentAmmo == 0 && extraCurrentAmmo == 0)
-            {
-                return;
+                // 테스트용
+                /*GameManager.instance.isGameover = true;*/
+
+                // 사격 버튼을 눌렀을 때 현재 총알이 존재한다면
+                if (currentAmmo > 0)
+                {
+                    nextTimeToFire = Time.time + fireRate;
+                    Shoot();
+                }
+                // 사격 버튼을 눌렀을 때 현재 총알이 존재하지 않는다면 
+                else if (currentAmmo == 0 && extraCurrentAmmo == 0 && Input.GetButtonDown("Fire1"))
+                {
+                    gunAudio.clip = emptyAmmo;
+                    gunAudio.Play();
+                    return;
+                }
+
             }
 
-            // 이도 저도 아니다 = 여분 총알은 있다. = 재장전 수행.
-            StartCoroutine(Reload());
-        }
+            // 근접공격
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                animator.SetTrigger("MeleeAttack");
+            }
+
+            // 재장전 관련(R키를 눌렀으면서(AND) 현재 총알과 전체 총알 개수가 맞지 않거나(OR) 현재 총알이 0발일 경우)
+            if (Input.GetKeyDown(KeyCode.R) && currentAmmo != maxAmmo || currentAmmo <= 0)
+            {
+                // ~인 와중에 R키를 눌렀는데 여분 총알까지 없다?
+                if (Input.GetKeyDown(KeyCode.R) && currentAmmo == 0 && extraCurrentAmmo == 0)
+                {
+                    gunAudio.clip = emptyAmmo;
+                    gunAudio.Play();
+                    return;
+                }
+                // R키를 눌렀는데 현재 총알은 있는데 여분 총알은 없다?
+                else if (Input.GetKeyDown(KeyCode.R) && extraCurrentAmmo == 0)
+                {
+                    gunAudio.clip = emptyAmmo;
+                    gunAudio.Play();
+                    return;
+                }
+                // 아무것도 없지만 R키는 누르지 않았다?            
+                else if (currentAmmo == 0 && extraCurrentAmmo == 0)
+                {
+                    return;
+                }
+
+                // 이도 저도 아니다 = 여분 총알은 있다. = 재장전 수행.
+                StartCoroutine(Reload());
+            }
+        }        
     }
 
     void Shoot()
