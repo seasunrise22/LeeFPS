@@ -75,7 +75,7 @@ public class LevelManager : MonoBehaviour
         CrateGenerator.instance.Start(); // isGen = true로 해서 상자 생성 재개, existCrates 리스트 초기화.
 
         // 게임 시간 다시 흐르도록.
-        GameManager.instance.timeLeft = 10f;
+        GameManager.instance.timeLeft = 30f;
         GameManager.instance.isLvUp = false;
 
         // 스테이지 UI 갱신.

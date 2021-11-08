@@ -19,6 +19,7 @@ public class Gun : MonoBehaviour
 
     public ParticleSystem muzzleFlash; // 총구 이펙트
     public GameObject impactEffect; // 피탄 이펙트
+    public GameObject meleeEffect; // 근접공격 피격 이펙트
 
     public AudioSource gunAudio;    // 총에 달린 AudioSource = 카세트테이프
     public AudioClip shootAudio;    // 총 발사 소리
@@ -136,8 +137,10 @@ public class Gun : MonoBehaviour
             if (target != null)
             {
                 target.TakeDamage(damage);
+                GameObject impactGO = Instantiate(meleeEffect, hit.point, Quaternion.LookRotation(hit.normal));
+                Destroy(impactGO, 1f);
             }
-        }
+        }        
     }
 
     IEnumerator Reload()

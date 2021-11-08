@@ -2742,6 +2742,12 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 38b450e2adcb6f542acc8c1d423bd8dc, type: 3}
     - target: {fileID: 9121096138600308632, guid: fa55bc3f91e0f6544ae0fa7127af3b43,
         type: 3}
+      propertyPath: meleeEffect
+      value: 
+      objectReference: {fileID: 4320986394426633212, guid: 45dd6a8954b0e494787f2f81f6c9faa7,
+        type: 3}
+    - target: {fileID: 9121096138600308632, guid: fa55bc3f91e0f6544ae0fa7127af3b43,
+        type: 3}
       propertyPath: muzzleFlash
       value: 
       objectReference: {fileID: 1893832773}
